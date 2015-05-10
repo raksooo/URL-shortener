@@ -19,27 +19,26 @@ var connection = mysql.createPool({
     database : secret.details.database
 });
 
-app.get("*", function(request, response) {
-    var shortened = request.url.substring(1);
-    if (shortened.length > 0) {
-        findLink(shortened, function(link) {
-            if (link !== undefined) {
-                response.redirect(link);
-            } else {
-                serveForm(function(index) {
-                    response.end(index);
-                });
-            }
-        });
-    } else {
-        serveForm(function(index) {
-            response.end(index);
-        });
-    }
+app.get("/", function(request, response) {
+    serveForm(function(index) {
+        response.end(index);
+    });
+});
+
+app.get("/:shortened", function(request, response) {
+    findLink(request.params.shortened, function(link) {
+        if (link !== undefined) {
+            response.redirect(link);
+        } else {
+            serveForm(function(index) {
+                response.end(index);
+            });
+        }
+    });
 });
 
 app.post("/", function(request, response) {
-    response.send('http://is.rascal.sexy/' + shorten(request.body.link));
+    response.send(request.baseUrl + shorten(request.body.link));
 });
 
 function serveForm(callback) {
