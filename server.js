@@ -1,4 +1,3 @@
-var http = require("http");
 var secret = require("./secret");
 var fs = require('fs');
 var mysql = require("mysql");
@@ -38,7 +37,7 @@ app.get("/:shortened", function(request, response) {
 });
 
 app.post("/", function(request, response) {
-    response.send(request.baseUrl + shorten(request.body.link));
+    response.send('http://is.rascal.sexy/' + shorten(request.body.link));
 });
 
 function serveForm(callback) {
