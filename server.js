@@ -37,7 +37,7 @@ app.get("/:shortened", function(request, response) {
 });
 
 app.post("/", function(request, response) {
-    response.send('http://is.rascal.sexy/' + shorten(request.body.link));
+    response.send('http://' + request.hostname + '/' + shorten(request.body.link));
 });
 
 function serveForm(callback) {
