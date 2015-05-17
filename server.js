@@ -1,11 +1,14 @@
-var secret = require("./secret");
-var fs = require('fs');
-var mysql = require("mysql");
-var bodyParser = require('body-parser');
-var express = require('express');
-var app = express();
+var secret = require("./secret"),
+    fs = require('fs'),
+    mysql = require("mysql"),
+    bodyParser = require('body-parser'),
+    finalhandler = require('finalhandler'),
+    serveStatic = require('serve-static'),
+    express = require('express'),
+    app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
+var serve = serveStatic("./");
 
 var shortenedLength = 4;
 
@@ -18,10 +21,9 @@ var connection = mysql.createPool({
     database : secret.details.database
 });
 
-app.get("/", function(request, response) {
-    serveForm(function(index) {
-        response.end(index);
-    });
+app.get("/", function(req, res) {
+    var done = finalhandler(req, res);
+    serve(req, res, done);
 });
 
 app.get("/:shortened", function(request, response) {
@@ -29,9 +31,8 @@ app.get("/:shortened", function(request, response) {
         if (link !== undefined) {
             response.redirect(link);
         } else {
-            serveForm(function(index) {
-                response.end(index);
-            });
+            var done = finalhandler(request, response);
+            serve(request, response, done);
         }
     });
 });
@@ -39,12 +40,6 @@ app.get("/:shortened", function(request, response) {
 app.post("/", function(request, response) {
     response.send('http://' + request.hostname + '/' + shorten(request.body.link));
 });
-
-function serveForm(callback) {
-    fs.readFile(__dirname + '/index.html', function(err, index) {
-        callback(index);
-    });
-}
 
 function findLink(shortened, callback) {
     connection.query('SELECT link FROM shortenedlinks WHERE short=?;', [shortened], function(err, rows, fields) {
