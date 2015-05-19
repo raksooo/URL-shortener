@@ -14,6 +14,10 @@ var shortenedLength = 4;
 
 var chars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "_"];
 
+var SELECT = 'SELECT link FROM shortenedlinks WHERE short=?;',
+    INSERT = 'INSERT INTO shortenedlinks (short, link) VALUES (?, ?);',
+    LOOKUP = 'SELECT short FROM shortenedlinks WHERE link=?;';
+
 var connection = mysql.createPool({
     host     : 'localhost',
     user     : secret.details.user,
@@ -27,7 +31,6 @@ app.get("/", function(req, res) {
 
 app.get("/:shortened", function(request, response) {
     findLink(request.params.shortened, function(link) {
-        console.log(link);
         if (link !== undefined) {
             response.redirect(link);
         } else {
@@ -37,11 +40,13 @@ app.get("/:shortened", function(request, response) {
 });
 
 app.post("/", function(request, response) {
-    response.send('http://' + request.hostname + '/' + shorten(request.body.link));
+    shorten(request.body.link, function(shortened) {
+        response.send('http://' + request.hostname + '/' + shortened);
+    });
 });
 
 function findLink(shortened, callback) {
-    connection.query('SELECT link FROM shortenedlinks WHERE short=?;', [shortened], function(err, rows, fields) {
+    connection.query(SELECT, [shortened], function(err, rows, fields) {
         if (rows.length > 0) {
             callback(rows[0].link);
         } else {
@@ -60,10 +65,28 @@ function generateShort() {
     return shortened;
 }
 
-function shorten(link) {
+function generateShortWrapper(callback) {
     var shortened = generateShort();
-    connection.query('INSERT INTO shortenedlinks (short, link) VALUES (?, ?);', [shortened, link]);
-    return shortened;
+    connection.query(SELECT, [shortened], function(err, rows, fields) {
+        if (rows.length > 0) {
+            generateShortWrapper(callback);
+        } else {
+            callback(shortened);
+        }
+    });
+}
+
+function shorten(link, callback) {
+    connection.query(LOOKUP, [link], function(err, rows, fields) {
+        if (rows.length > 0) {
+            callback(rows[0].short);
+        } else {
+            generateShortWrapper(function(shortened) {
+                connection.query(INSERT, [shortened, link]);
+                callback(shortened);
+            });
+        }
+    });
 }
 
 var server = app.listen(8888, function () {
