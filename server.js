@@ -1,5 +1,4 @@
 var secret = require("./secret"),
-    fs = require('fs'),
     mysql = require("mysql"),
     bodyParser = require('body-parser'),
     finalhandler = require('finalhandler'),
@@ -77,6 +76,9 @@ function generateShortWrapper(callback) {
 }
 
 function shorten(link, callback) {
+    if (link.indexOf('http') !== 0) {
+        link = 'http://' + link;
+    }
     connection.query(LOOKUP, [link], function(err, rows, fields) {
         if (rows.length > 0) {
             callback(rows[0].short);
