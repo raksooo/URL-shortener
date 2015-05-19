@@ -3,6 +3,7 @@ function shorten() {
     xhr.open("POST", "/", true);
     xhr.onload = function (e) {
         if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById("result").className = "result";
             document.getElementById("result").innerHTML = xhr.responseText;
         }
     };

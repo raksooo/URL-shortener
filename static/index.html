@@ -2,15 +2,18 @@
 <html>
     <head>
         <title>URL-shortener</title>
-        <link href="static/styles.css" type="text/css" ref="stylesheet" />
+        <link href='http://fonts.googleapis.com/css?family=Exo:400italic,500italic,100italic,300italic,200italic' rel='stylesheet' type='text/css'>
+        <link href="static/styles.css" type="text/css" rel="stylesheet" />
         <script src="static/script.js"></script>
     </head>
     <body>
-        <div id="result">Create short urls!</div>
-        <form onsubmit="return shorten();">
-            <input type="text" id="url" /><br />
-            <input type="submit" value="Shorten!" />
-        </form>
+        <main>
+            <h1 id="result">Create short urls!</h1>
+            <form onsubmit="return shorten();">
+                <input type="text" id="url" />
+                <input type="submit" value="Shorten!" />
+            </form>
+        </main>
     </body>
 </html>
 
