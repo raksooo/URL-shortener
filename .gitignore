@@ -2,3 +2,5 @@
 node_modules/
 secret.js
 nohup.out
+npm-debug.log
+
