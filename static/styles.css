@@ -21,10 +21,16 @@ main h1 {
     font-size: 3em;
     height: 100px;
     vertical-align: middle;
+    font-weight: 300;
+}
+
+main h1 a, main h1 a:hover, main h1 a:active, main h1 a:focus, main h1 a:visited {
+    text-decoration: none;
+    color: black;
 }
 
 main h1.result {
-    font-size: 2em;
+    font-size: 2.3em;
 }
 
 main form input {
