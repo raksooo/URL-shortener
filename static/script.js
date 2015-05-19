@@ -3,8 +3,13 @@ function shorten() {
     xhr.open("POST", "/", true);
     xhr.onload = function (e) {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            document.getElementById("result").className = "result";
-            document.getElementById("result").innerHTML = xhr.responseText;
+            var result = document.getElementById("result");
+            var a = document.createElement("a");
+            a.setAttribute("href", xhr.responseText);
+            a.innerText = xhr.responseText;
+            result.innerHTML = "";
+            result.className = "result";
+            result.appendChild(a);
         }
     };
     xhr.onerror = function (e) {
