@@ -76,6 +76,7 @@ function generateShortWrapper(callback) {
 }
 
 function shorten(link, callback) {
+    link = link.toLowerCase();
     if (link.indexOf('http') !== 0) {
         link = 'http://' + link;
     }
