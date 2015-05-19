@@ -39,9 +39,13 @@ app.get("/:shortened", function(request, response) {
 });
 
 app.post("/", function(request, response) {
-    shorten(request.body.link, function(shortened) {
-        response.send('http://' + request.hostname + '/' + shortened);
-    });
+    if (request.body.link === "") {
+        response.end();
+    } else {
+        shorten(request.body.link, function(shortened) {
+            response.send('http://' + request.hostname + '/' + shortened);
+        });
+    }
 });
 
 function findLink(shortened, callback) {
