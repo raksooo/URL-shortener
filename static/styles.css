@@ -3,7 +3,22 @@ html, body {
     margin: 0;
     font-family: 'Exo', sans-serif;
     font-style: italic;
-    font-weight: 100;
+    font-weight: 200;
+}
+
+div {
+    float: left;
+    margin: 3px 10px;
+    opacity: 0.2;
+    transition: opacity 90ms linear;
+}
+
+div:hover {
+    opacity: 0.9;
+}
+
+div a {
+    font-size: 0.9em;
 }
 
 main {
@@ -61,6 +76,7 @@ main form input[type="submit"] {
     font-family: inherit;
     font-style: inherit;
     font-weight: 200;
+    transition: background-color 40ms linear;
 }
 
 main form input[type="submit"]:active {
