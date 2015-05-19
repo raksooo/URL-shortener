@@ -8,7 +8,7 @@ var secret = require("./secret"),
     app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
-var serve = serveStatic("./");
+app.use("/static", serveStatic(__dirname + "/static/"));
 
 var shortenedLength = 4;
 
@@ -22,17 +22,16 @@ var connection = mysql.createPool({
 });
 
 app.get("/", function(req, res) {
-    var done = finalhandler(req, res);
-    serve(req, res, done);
+    res.sendFile(__dirname + "/static/index.html");
 });
 
 app.get("/:shortened", function(request, response) {
     findLink(request.params.shortened, function(link) {
+        console.log(link);
         if (link !== undefined) {
             response.redirect(link);
         } else {
-            var done = finalhandler(request, response);
-            serve(request, response, done);
+            response.sendFile(__dirname + "/static/index.html");
         }
     });
 });
