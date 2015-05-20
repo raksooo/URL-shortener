@@ -5,8 +5,8 @@ function shorten() {
         if (xhr.readyState === 4 && xhr.status === 200 && xhr.responseText !== "") {
             var result = document.getElementById("result");
             var a = document.createElement("a");
-            a.setAttribute("href", xhr.responseText);
-            a.innerText = xhr.responseText;
+            a.setAttribute("href", xhr.response);
+            a.innerHTML = xhr.response;
             result.innerHTML = "";
             result.className = "result";
             result.appendChild(a);
