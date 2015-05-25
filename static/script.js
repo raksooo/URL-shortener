@@ -3,13 +3,17 @@ function shorten() {
     xhr.open("POST", "/", true);
     xhr.onload = function (e) {
         if (xhr.readyState === 4 && xhr.status === 200 && xhr.responseText !== "") {
-            var result = document.getElementById("result");
-            var a = document.createElement("a");
-            a.setAttribute("href", xhr.response);
-            a.innerHTML = xhr.response;
-            result.innerHTML = "";
-            result.className = "result";
-            result.appendChild(a);
+            if (xhr.response.indexOf("http")) {
+                document.getElementById("result").innerHTML = xhr.response;
+            } else {
+                var result = document.getElementById("result");
+                var a = document.createElement("a");
+                a.setAttribute("href", xhr.response);
+                a.innerHTML = xhr.response;
+                result.innerHTML = "";
+                result.className = "result";
+                result.appendChild(a);
+            }
         }
     };
     xhr.onerror = function (e) {
