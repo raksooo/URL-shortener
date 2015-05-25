@@ -17,6 +17,7 @@ var CREATE = 'CREATE TABLE IF NOT EXISTS urlshortener (short varchar(16) PRIMARY
     SELECT = 'SELECT * FROM urlshortener WHERE short=?;',
     INSERT = 'INSERT INTO urlshortener (short, link, ip, date, clicks) VALUES (?, ?, ?, DATE_FORMAT(NOW(),\'%Y-%m-%d %H:%i\'), 0);',
     LOOKUP = 'SELECT short FROM urlshortener WHERE link=?;',
+    UPDATE = 'UPDATE urlshortener SET clicks = clicks + 1 WHERE short = ?;',
     ALLOWED = 'SELECT COUNT(short) as n FROM urlshortener WHERE ip = ? AND date = DATE_FORMAT(NOW(), \'%Y-%m-%d %H:%i\');';
 
 var connection = mysql.createPool({
@@ -59,6 +60,7 @@ function findLink(shortened, callback) {
     connection.query(SELECT, [shortened], function(err, rows, fields) {
         if (rows && rows.length > 0) {
             callback(rows[0].link);
+            connection.query(UPDATE, [shortened]);
         } else {
             callback(undefined);
         }
