@@ -115,9 +115,6 @@ function shorten(link, ip, callback) {
     });
 }
 
-var server = app.listen(8888, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('Listening at http://%s:%s', host, port);
+var server = app.listen(8082, function () {
+  console.log('Listening...');
 });
