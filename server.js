@@ -99,7 +99,6 @@ function shortenIfAllowed(ip, callback) {
 }
 
 function shorten(link, ip, callback) {
-    link = link.toLowerCase();
     if (link.indexOf('http') !== 0) {
         link = 'http://' + link;
     }
