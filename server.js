@@ -48,7 +48,7 @@ app.post("/", function(req, res) {
     } else {
         shorten(req.body.link, req.headers['x-forwarded-for'], function(shortened) {
             if (shortened) {
-                res.send('http://' + req.hostname + '/' + shortened);
+                res.send('https://' + req.hostname + '/' + shortened);
             } else {
                 res.send('Wait a minute!')
             }
@@ -114,6 +114,6 @@ function shorten(link, ip, callback) {
     });
 }
 
-var server = app.listen(8082, function () {
+var server = app.listen(process.env.PORT, function () {
   console.log('Listening...');
 });
